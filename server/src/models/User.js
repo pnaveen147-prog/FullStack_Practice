@@ -35,6 +35,13 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ["Admin", "Manager", "User"],
       default: "User"
+    },
+
+    password: {
+      type: String,
+      required: true,
+        minlength: 8,
+        select: false
     }
   },
   {
