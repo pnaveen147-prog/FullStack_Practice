@@ -1,4 +1,3 @@
-
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
@@ -8,13 +7,13 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
       minlength: 2,
-      maxlength: 50
+      maxlength: 50,
     },
 
     lastName: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
 
     email: {
@@ -22,31 +21,36 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
       lowercase: true,
-      trim: true
+      trim: true,
     },
 
     age: {
       type: Number,
       min: 18,
-      max: 100
+      max: 100,
     },
 
     role: {
       type: String,
       enum: ["Admin", "Manager", "User"],
-      default: "User"
+      default: "User",
     },
 
     password: {
       type: String,
       required: true,
-        minlength: 8,
-        select: false
-    }
+      minlength: 8,
+      select: false,
+    },
+
+    refreshToken: {
+      type: String,
+      default: null,
+    },
   },
   {
-    timestamps: true
-  }
+    timestamps: true,
+  },
 );
 
 module.exports = mongoose.model("User", userSchema);
