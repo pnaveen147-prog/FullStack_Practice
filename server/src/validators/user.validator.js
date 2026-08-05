@@ -1,57 +1,30 @@
-const joi = require('joi');
+const joi = require("joi");
 
 const createUserSchema = joi.object({
-    firstName: joi.string().min(2)
-    .max(50)
-    .required(),
+  firstName: joi.string().min(2).max(50).required(),
 
-    lastName: joi.string()
-    .min(2)
-    .max(50)
-    .required(),
+  lastName: joi.string().min(2).max(50).required(),
 
-    email: joi.string()
-    .email()
-    .required(),
+  email: joi.string().email().required(),
 
-    age: joi.number()
-    .min(18)
-    .max(100)
-    .required(),
-    
-    role: joi.string()
-    .valid('Admin', 'Manager', 'User')
-    .default('User')
+  age: joi.number().min(18).max(100).required(),
+
+  role: joi.string().valid("Admin", "Manager", "User").default("User"),
 });
 
 const paginationSchema = joi.object({
-    page: joi.number()
-    .integer()
-    .min(1)
-    .default(1),
+  page: joi.number().integer().min(1).default(1),
 
-    limit: joi.number()
-    .integer()
-    .min(1)
-    .max(100)
-    .default(10),
+  limit: joi.number().integer().min(1).max(100).default(10),
 
-    search: joi.string()
-            .allow('')
-            .default(''),
+  search: joi.string().allow("").default(""),
 
-    role: joi.string()
-    .valid('Admin', 'Manager', 'User')
-    .optional(),
+  role: joi.string().valid("Admin", "Manager", "User").allow("").optional(),
 
-    age: joi.number()
-    .integer()
-    .min(18)
-    .max(100)
-    .optional()
+  age: joi.number().integer().min(18).max(100).allow("").optional(),
 });
 
 module.exports = {
-    createUserSchema,
-    paginationSchema
+  createUserSchema,
+  paginationSchema,
 };

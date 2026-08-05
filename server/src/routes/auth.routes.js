@@ -2,21 +2,34 @@ const express = require("express");
 
 const router = express.Router();
 
-const authController = require('../controllers/auth.controller');
+const authController = require("../controllers/auth.controller");
 
-const asyncHandler = require('../middleware/asyncHandler');
+const asyncHandler = require("../middleware/asyncHandler");
 
-const validationMiddleware = require('../middleware/validation.middleware');
+const validationMiddleware = require("../middleware/validation.middleware");
 
-const {registerSchema, loginSchema} = require('../validators/auth.validator');
+const { registerSchema, loginSchema } = require("../validators/auth.validator");
+const authenticate = require("../middleware/auth.middleware");
 
-router.post('/register',
-validationMiddleware(registerSchema),
-asyncHandler(authController.register)
-)
+router.post(
+  "/register",
+  validationMiddleware(registerSchema),
+  asyncHandler(authController.register),
+);
 
-router.post('/login', validationMiddleware(loginSchema),
-asyncHandler(authController.login))
+router.post(
+  "/login",
+  validationMiddleware(loginSchema),
+  asyncHandler(authController.login),
+);
+router.post(
+  "/logout",
 
+  authenticate,
+
+  authController.logout,
+);
+
+router.post("/refresh-token", asyncHandler(authController.refreshToken));
 
 module.exports = router;
