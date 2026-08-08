@@ -96,63 +96,63 @@ function Login() {
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <TextField
             fullWidth
-
             margin="normal"
-
             label="Email"
-
             type="email"
-
             {...register("email", {
               required: "Email is required",
-
               pattern: {
                 value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-
                 message: "Enter a valid email",
               },
             })}
-
             error={!!errors.email}
-
             helperText={errors.email?.message}
           />
 
           <TextField
             fullWidth
-
             margin="normal"
-
             label="Password"
-
             type="password"
-
             {...register("password", {
               required: "Password is required",
-
               minLength: {
                 value: 6,
-
                 message: "Minimum 6 characters",
               },
             })}
-
             error={!!errors.password}
-
             helperText={errors.password?.message}
           />
 
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              mt: 1,
+              mb: 2,
+            }}
+          >
+            <Link
+              to="/forgot-password"
+              style={{
+                textDecoration: "none",
+                fontSize: "14px",
+                color: "#1976d2",
+                fontWeight: 500,
+              }}
+            >
+              Forgot Password?
+            </Link>
+          </Box>
+
           <Button
             fullWidth
-
             variant="contained"
-
             type="submit"
-
             disabled={loading}
-
             sx={{
-              marginTop: 3,
               height: 50,
             }}
           >
@@ -166,7 +166,16 @@ function Login() {
             marginTop: 3,
           }}
         >
-          Don't have an account? <Link to="/register">Register</Link>
+          Don't have an account?{" "}
+          <Link
+            to="/register"
+            style={{
+              textDecoration: "none",
+              fontWeight: 600,
+            }}
+          >
+            Register
+          </Link>
         </Typography>
       </Paper>
     </Box>

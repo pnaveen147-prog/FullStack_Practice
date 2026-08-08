@@ -34,6 +34,36 @@ const logout = async () => {
   return response.data;
 };
 
+const forgotPassword = async (payload) => {
+  const response = await axiosInstance.post(
+    "/auth/forgot-password",
+
+    payload,
+  );
+
+  return response.data;
+};
+
+const resetPassword = async (payload) => {
+  const response = await axiosInstance.post(
+    "/auth/reset-password",
+
+    payload,
+  );
+
+  return response.data;
+};
+
+const verifyEmail = async (payload) => {
+  const response = await axiosInstance.post(
+    "/auth/verify-email",
+
+    payload,
+  );
+
+  return response.data;
+};
+
 export default {
   login,
 
@@ -42,4 +72,8 @@ export default {
   refreshToken,
 
   logout,
+
+  forgotPassword,
+  resetPassword,
+  verifyEmail,
 };

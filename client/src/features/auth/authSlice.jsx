@@ -42,6 +42,66 @@ export const logoutUser = createAsyncThunk(
   },
 );
 
+export const forgotPassword = createAsyncThunk(
+  "auth/forgotPassword",
+
+  async (
+    payload,
+
+    thunkAPI,
+  ) => {
+    try {
+      const response = await authAPI.forgotPassword(payload);
+
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to send reset link.",
+      );
+    }
+  },
+);
+
+export const resetPassword = createAsyncThunk(
+  "auth/resetPassword",
+
+  async (
+    payload,
+
+    thunkAPI,
+  ) => {
+    try {
+      const response = await authAPI.resetPassword(payload);
+
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to reset password.",
+      );
+    }
+  },
+);
+
+export const verifyEmail = createAsyncThunk(
+  "auth/verifyEmail",
+
+  async (
+    payload,
+
+    thunkAPI,
+  ) => {
+    try {
+      const response = await authAPI.verifyEmail(payload);
+
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Email verification failed.",
+      );
+    }
+  },
+);
+
 const authSlice = createSlice({
   name: "auth",
 
@@ -116,7 +176,91 @@ const authSlice = createSlice({
         localStorage.removeItem("accessToken");
 
         localStorage.removeItem("refreshToken");
-      });
+      })
+
+      .addCase(
+        forgotPassword.pending,
+
+        (state) => {
+          state.loading = true;
+
+          state.error = null;
+        },
+      )
+
+      .addCase(
+        forgotPassword.fulfilled,
+
+        (state) => {
+          state.loading = false;
+        },
+      )
+
+      .addCase(
+        forgotPassword.rejected,
+
+        (state, action) => {
+          state.loading = false;
+
+          state.error = action.payload;
+        },
+      )
+
+      .addCase(
+        resetPassword.pending,
+
+        (state) => {
+          state.loading = true;
+
+          state.error = null;
+        },
+      )
+
+      .addCase(
+        resetPassword.fulfilled,
+
+        (state) => {
+          state.loading = false;
+        },
+      )
+
+      .addCase(
+        resetPassword.rejected,
+
+        (state, action) => {
+          state.loading = false;
+
+          state.error = action.payload;
+        },
+      )
+
+      .addCase(
+        verifyEmail.pending,
+
+        (state) => {
+          state.loading = true;
+
+          state.error = null;
+        },
+      )
+
+      .addCase(
+        verifyEmail.fulfilled,
+
+        (state) => {
+          state.loading = false;
+        },
+      )
+
+      .addCase(
+        verifyEmail.rejected,
+
+        (state, action) => {
+          state.loading = false;
+
+          state.error = action.payload;
+        },
+      );
   },
 });
 
