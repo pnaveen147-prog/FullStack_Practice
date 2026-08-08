@@ -5,7 +5,8 @@ const User = require("../models/User");
 const AppError = require("../errors/AppError");
 const config = require("../config/jwt");
 const { generateAccessToken, generateRefreshToken } = require("../utils/jwt");
-
+const { generateRandomToken } = require("../utils/tokenGenerator");
+const { sendPasswordResetEmail } = require("../services/email.service");
 const registerUser = async (payload) => {
   const existingUser = await User.findOne({
     email: payload.email,
@@ -102,9 +103,82 @@ const logoutUser = async (userId) => {
   return;
 };
 
+const forgotPassword = async (email) => {
+  const user = await User.findOne({ email });
+
+  /**
+   * Don't reveal whether the email exists.
+   * Always return success.
+   */
+  if (!user) {
+    return;
+  }
+
+  const resetToken = generateRandomToken();
+
+  user.passwordResetToken = resetToken;
+
+  user.passwordResetExpires = new Date(Date.now() + 15 * 60 * 1000);
+
+  await user.save();
+
+  /**
+   * We'll send the email
+   * in the next step.
+   */
+
+  await sendPasswordResetEmail(
+    user.email,
+
+    user.firstName,
+
+    resetToken,
+  );
+
+  return;
+};
+
+const resetPassword = async (token, password) => {
+  const user = await User.findOne({
+    passwordResetToken: token,
+
+    passwordResetExpires: {
+      $gt: new Date(),
+    },
+  }).select("+password");
+
+  if (!user) {
+    throw new AppError(
+      "Password reset token is invalid or expired",
+
+      400,
+    );
+  }
+
+  const hashedPassword = await bcrypt.hash(
+    password,
+
+    10,
+  );
+
+  user.password = hashedPassword;
+
+  user.passwordResetToken = null;
+
+  user.passwordResetExpires = null;
+
+  user.refreshToken = null;
+
+  await user.save();
+
+  return;
+};
+
 module.exports = {
   registerUser,
   loginUser,
   refreshAccessToken,
   logoutUser,
+  forgotPassword,
+  resetPassword,
 };

@@ -30,6 +30,9 @@ router.post(
   authController.logout,
 );
 
+router.post("/reset-password", authController.resetPassword);
+
 router.post("/refresh-token", asyncHandler(authController.refreshToken));
+router.post("/forgot-password", authController.forgotPassword);
 
 module.exports = router;
